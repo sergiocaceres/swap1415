@@ -1,0 +1,15 @@
+El Backbone es:
+a) Eje secundario de enlace entre máquinas
+b) Eje de enlace entre servidores
+c) Eje principal de enlace entre servidores
+d) Eje principal de enlace entre máquinas
+
+Respuesta correcta: D
+
+Cuando se conecta una granja web a Internet..
+a) Conviene establecer filtros para que llegue a la máquina el tráfico que le deba llegar
+b) Otros tipos de tráfico no hacen falta bloquearse
+c) La información IP origen, IP destino no se usan para el filtrado
+d) Solo se expresa en Kbps
+
+Respuesta correcta: A
