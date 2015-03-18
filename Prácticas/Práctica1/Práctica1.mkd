@@ -1,0 +1,18 @@
+##PRÁCTICA 1
+
+Sergio Cáceres Pintor
+
+##Objetivo
+
+* Configurar dos máquinas virtuales Ubuntu server
+* Configurar la red interna de ambas máquinas para la comunicación entre ellas
+
+
+##Solución
+
+Sencillamente lo que hacemos en esta práctica es añadir una interfaz de red, siendo NAT una máquina virtual y la otra como red interna. 
+
+####Imágenes
+* Se adjuntan imágenes de la comunicación entre las máquinas, por lo que vemos que se comunican bien (ping_primera_maquina, ping_segunda_maquina).
+
+* Se adjuntan imágenes de la instalación de Apache y su funcionamiento en ambas máquinas (configuracion_primera_maquina,configuracion_segunda_maquina)
