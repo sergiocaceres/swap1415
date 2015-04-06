@@ -1,0 +1,15 @@
+En los algoritmos de balanceo de carga basado en turnos:
+a) El algoritmo supone cada máquina con diferente potencia
+b) Es adecuado usarlo si todas las máquinas tienen una potencia similar
+c) Se evita la sobrecarga de las máquinas que puedan tener mas trabajo
+d) Es adecuado usarlo cuando el número de conexiones no es un buen indicador
+
+Respuesta correcta: B
+
+La redundancia como concepto del balanceo de carga:
+a) No trata de evitar la degradación del servicio
+b) Existe una relación maestro-maestro solamente
+c) Si un dispositivo falla, otro pasa a hacer su función
+d) Puede manejar los protocolos de alto nivel
+
+Respuesta correcta: C
