@@ -1,0 +1,31 @@
+EJERCICIOS TEMA 3
+_________________________________________________________________________________________________________________________________
+
+Sergio Cáceres Pintor
+_________________________________________________________________________________________________________________________________
+
+Ejercicio 3.1 Buscar con qué órdenes de terminal o herramientas gráficas podemos configurar bajo Windows y bajo Linux el enrutamiento del tráfico de un servidor para pasar el tráfico desde una subred a otra.
+
+-> Linux:
+
+Comando echo "1" > /proc/sys/net/ipv4/ip_forward para activar el enrutamiento, este se activa al poner dicha variable a 1, acto seguido habría que configurar el filtrado de paquetes para que acepte el redireccionamiento desde dentro hacia fuera de nuestra red. 
+
+-> Windows:
+
+Es recomendable el uso de dos tarjetas de red y para su configuración basta con acceder a las Herramientas Administrativas y configurar paso a paso el Servicio de Enrutamiento y Acceso Remoto de Windows Server 2008.
+
+
+Ejercicio 3.2 Buscar con qué órdenes de terminal o herramientas gráficas podemos configurar bajo Windows y bajo Linux el filtrado y bloqueo de paquetes.
+
+-> Linux:
+
+· iptables –F : flush de reglas
+· iptables –L : listado de reglas que se estan aplicando
+· iptables –A : añadir regla
+· iptables –D : borrar una regla o varias, etc…
+
+-> Windows:
+
+Se puede configurar manualmente el filtrado y bloqueo de paquetes. En relación a comandos no viene claro su uso.
+
+
