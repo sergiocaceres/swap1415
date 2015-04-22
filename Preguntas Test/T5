@@ -1,0 +1,15 @@
+Cuando se evalúa el rendimiento de un sitio web:
+a) Se fija un numero bajo de usuarios
+b) Sólo se evalúa el comportamiento del servidor con el doble de usuarios
+c) Primero se fija un número alto de usuarios y luego se evalúa el comportamiento del servidor con el doble de usuarios
+d) Ninguna de las anteriores
+
+Respuesta correcta: C
+
+Apache Benchmark:
+a) Simula con total fidelidad el uso del sitio web que pueden hacer los usuarios
+b) Permite comprobar el rendimiento de cualquier servidor
+c) Siempre que ejecutemos el test se obtiene el mismo resultado
+d) Lo ideal es no hacer mas de 15 ejecuciones para sacar los resultados y representarlo gráficamente
+
+Respuesta correcta: B
