@@ -1,0 +1,63 @@
+##PRÁCTICA 3
+
+Sergio Cáceres Pintor y David Olid Medina
+
+##Objetivo
+
+* En esta práctica configuraremos una red entre varias máquinas de forma que tengamos un balanceador que reparta la carga entre varios servidores finales.
+* El problema a solucionar es la sobrecarga de los servidores. Se puede balancear cualquier protocolo, pero dado que esta asignatura se centra en las tecnologías web, balancearemos los servidores HTTP que tenemos configurados.
+* De esta forma conseguiremos una infraestructura redundante y de alta disponibilidad.
+
+
+##Solución
+
+Creamos una nueva máquina virtual la cual usaremos para balancear la carga de las otras dos máquinas virtuales. No podemos instalar apache.
+
+####<u>Instalar nginx en Ubuntu Server 12.04</u>
+
+Importamos la clave del repositorio de software. Accedemos primero al directorio tmp y luego: <b>wget http://nginx.org/keys/nginx_signing.key </b> Seguidamente hacemos
+<b>apt-key add /tmp/nginx_signing.key</b> Y para terminar
+<b>rm -f /tmp/nginx_signing.key </b>
+
+Añadimos al repositorio con los comandos: 
+<b>*echo "deb http://nginx.org/packages/ubuntu/ lucid nginx" >> /etc/apt/sources.list*</b>
+
+<b>*echo "deb-src http://nginx.org/packages/ubuntu/ lucid nginx" >> /etc/apt/sources.list*</b>
+
+![Imagen1](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica3/Captura1.JPG)
+
+Ya podemos instalar nginx con: <b> apt-get update </b> Y después
+<b>apt-get install nginx</b>
+
+Una vez instalado, podemos proceder a su configuración como balanceador de carga.
+
+
+####<u>Balanceo de carga usando nginx</u>
+
+Creo el archivo /etc/nginx/conf.d/default.conf
+
+Lo edito de la siguiente forma:
+
+![Imagen2](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica3/Captura2.JPG)
+
+Reiniciamos nginx para ver que la configuración es correcta. Lo hacemos con el comando <b>*sudo service nginx restart*</b> Y comprobamos que funciona correctamente haciendo peticiones a esta IP <b>*curl 192.168.1.25*</b>
+
+![Imagen3](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica3/Captura3.JPG)
+
+Nginx nos ofrece distribuir las cargas de trabajo para pasar más tráfico a una máquina que a otra , esto se consigue simplemente añadiendo weight seguido de la carga que queremos asignarle a continuación de la ip de la máquina. Sería algo así: <b>*upstream apaches { server 192.168.1.100 weight=1; server 192.168.1.24 weight=2; }*</b> De esta forma estamos diciendo que la primera máquina tenga menos carga de trabajo que la segunda
+
+
+####<u>Balanceo de carga con haproxy</u>
+
+Primero paramos nginx con el comando <b>*service nginx stop*</b> Instalamos haproxy con el siguiente comando <b>*sudo apt-get install haproxy*</b>.
+
+A continuación modificamos el archivo /etc/haproxy/haproxy.cfg y modificamos dicho archivo de la siguiente forma:
+
+![Imagen4](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica3/Captura4.JPG)
+
+Para comprobar el correcto funcionamiento de nuestra configuración, lanzamos el servicio haproxy mediante el comando <b>*sudo /usr/sbin/haproxy -f /etc/haproxy/haproxy.cfg*</b>. Se puede observar como está funcionando correctamente ya que no nos muestra ningún error.
+
+![Imagen5](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica3/Captura5.JPG)
+
+Como todo está correcto, hago solicitudes http al balanceador, <b>*curl http://192.168.1.25*</b> y el resultado es el mismo.
+
