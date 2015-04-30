@@ -1,0 +1,67 @@
+##PRÁCTICA 2
+
+Sergio Cáceres Pintor y David Olid Medina
+
+##Objetivo
+
+* Aprender a copiar archivos mediante ssh
+* Clonar contenido entre máquinas
+* Configurar ssh para acceder a máquinas remotas sin contraseña
+* Establecer tareas en cron
+
+
+##Solución
+
+Primero identificamos cada máquina virtual cuyo comando fue recomendado por el profesor:
+<b>*$export PS1="\u@$(ip addr show dev eth0 | grep "inet " | cut -d" " -f6) $"*</b>
+
+
+
+####<u>Instalar la herramienta rsync</u>
+
+Instalamos la herramienta rsync con el comando: <b>*sudo apt-get install rsync*</b>. En mi caso ya lo tenía instalado a si que no fue necesario.
+
+A continuación vemos como clonamos la carpeta con el contenido del servidor web.
+Creamos en la máquina1 un archivo html llamado prueba y seguidamente hacemos la copia a la máquina 2 con el comando: <b>*rsync -avz -e ssh root@192.168.1.100:/var/www/ /var/www/*</b>
+
+![Imagen1](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica2/Captura1.JPG)
+
+![Imagen2](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica2/Captura2.JPG)
+
+
+
+Esta herramienta nos permite especificar que directorios copiar y cuales ignorar en el proceso de copia. Para probarlo vamos hacer una copia completa de directorio /var/www/ pero excluyendo var/www/error , var/www/stats y var/www/files/pictures.
+Esto lo haremos con el siguiente comando: <b>*rsync -avz --delete --exclude=**/stats --exclude=**/error -- exclude=**/files/pictures -e "ssh -l root" root@192.168.1.100:/var/www/ /var/www/*</b>
+
+![Imagen3](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica2/Captura3.JPG)
+
+
+
+####<u>Acceso sin contraseña para ssh</u>
+
+Con el comando <b>*ssh-keygen -t dsa*</b> vamos a generar la clave mediante ssh-keygen.
+
+![Imagen4](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica2/Captura4.png)
+
+Usaremos el comando <b>*ssh-copy-id*</b> que viene integrado con el comando ssh para copiar la clave. El comando sería: <b>*ssh-copy-id -i .ssh/id_dsa.pub root@192.168.1.100*</b>
+
+![Imagen5](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica2/Captura5.png)
+Lo que nos muestra lo siguiente:
+
+![Imagen6](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica2/Captura6.png)
+
+De esta forma ya podremos conectarnos al equipo1 sin contraseña con la orden <b>ssh 192.168.1.100 -l root </b>. Se puede ver como no nos pide ninguna contraseña:
+
+![Imagen7](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica2/Captura7.png)
+
+
+
+####<u>Programar tareas con crontab</u>
+
+Accedemos el fichero <b>/etc/crontab</b> de la máquina secundaria y añadiremos un archivo cuyo nombre será <b>ej5</b>:
+
+![Imagen8](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica2/Captura8.JPG)
+
+Esperamos unos segundos y vemos como al principio no hay nada y cuando llega a la hora indicada se crea. Hacemos un ls para comprobarlo:
+
+![Imagen9](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica2/Captura9.JPG)
