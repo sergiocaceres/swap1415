@@ -46,7 +46,8 @@ Con el comando <b>*ssh-keygen -t dsa*</b> vamos a generar la clave mediante ssh-
 Usaremos el comando <b>*ssh-copy-id*</b> que viene integrado con el comando ssh para copiar la clave. El comando sería: <b>*ssh-copy-id -i .ssh/id_dsa.pub root@192.168.1.100*</b>
 
 ![Imagen5](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica2/Captura5.png)
-Lo que nos muestra lo siguiente:
+
+Al ejecutar esa orden nos aparece lo siguiente:
 
 ![Imagen6](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica2/Captura6.png)
 
