@@ -1,0 +1,78 @@
+##PRÁCTICA 4
+
+Sergio Cáceres Pintor y David Olid Medina
+
+##Solución
+
+Creamos una máquina virtual nueva desde la cual vamos a utilizar como máquina externa a la granja web para realizar las peticiones web. La instalamos con Apache, es decir, elegimos la opción LAMP
+
+En la máquina 1 ( por ejemplo ) creamos un html, lo llamaremos practica4.html y a continuación, en la máquina 4 que acabamos de crear, lanzaremos peticiones web para comprobar su nivel de rendimiento.
+
+####<u>Rendimiento de una sola máquina servidora</u>
+
+Lanzamos peticiones con la orden <b>ab -n 100000 -c 100 http://192.168.1.100/practica4.html > prueba1.txt.</b> Lo que hacemos es solicitar la web 100000 veces con un nivel de ocurrencia de 100 en 100. Lo guardamos en un fichero de texto llamado prueba1 para poder ver mejor los resultados. 
+
+<b>Nos quedamos con los datos Time taken for tests, Failed requests, Requests per second.</b>
+
+![Imagen1](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura1.png)
+
+![Imagen2](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura2.png)
+
+![Imagen3](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura3.png)
+
+
+####<u>Rendimiento de la granja web con balanceador de carga</u>
+<u><b> Nginx </b></u>
+
+Lanzamos peticiones con la orden <b>ab -n 100000 -c 100 http://192.168.1.25/practica4.html > prueba2.txt.</b> Lo que hacemos es solicitar la web 100000 veces con un nivel de ocurrencia de 100 en 100. Lo guardamos en un fichero de texto llamado prueba2 para poder ver mejor los resultados. Esta vez lo hacemos sobre otra ip, la cual es la máquina balanceadora.
+
+<b>Nos quedamos con los datos Time taken for tests, Failed requests, Requests per second.</b>
+
+![Imagen4](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura4.png)
+
+![Imagen5](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura5.png)
+
+![Imagen6](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura6.png)
+
+
+<u><b> Haproxy </b></u>
+
+Igual que hemos hecho antes, en la misma máquina y la misma orden. Lo único que tenemos que hacer es parar el balanceador nginx con el comando <b> service nginx stop </b>
+
+Lanzamos peticiones con la orden <b>ab -n 100000 -c 100 http://192.168.1.25/practica4.html > prueba3.txt.</b> Lo que hacemos es solicitar la web 100000 veces con un nivel de ocurrencia de 100 en 100. Lo guardamos en un fichero de texto llamado prueba3 para poder ver mejor los resultados. Lo hacemos bajo la misma ip que lo hicimos anteriormente.
+
+<b>Nos quedamos con los datos Time taken for tests, Failed requests, Requests per second.</b>
+
+![Imagen7](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura7.png)
+
+![Imagen8](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura8.png)
+
+![Imagen9](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura9.png)
+
+
+####<u>Herramienta Siege</u>
+<u><b> Sobre máquina individual </b></u>
+
+Lanzamos un test de 60 segundos sin pausas, con la orden <b>siege -b -t60s -v http://192.168.1.100/practica4.html > prueba4.txt </b> sobre la máquina1.
+
+Nos quedamos con los datos <b>Availability, Elapsed time, Response time, Transaction Rate, Failed Transactions y Longest Transaction.</b>
+
+![Imagen10](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura10.png)
+
+<u><b> Sobre la granja con Nginx </b></u>
+
+Hacemos igual que antes pero cambiando la ip de la máquina, en este caso ponemos la máquina3, que es la que está configurada con los balanceadores.
+
+Lanzamos la orden <b>siege -b -t60s -v http://192.168.1.25/practica4.html > prueba5.txt </b> sobre la máquina3.
+
+Nos quedamos con los datos <b>Availability, Elapsed time, Response time, Transaction Rate, Failed Transactions y Longest Transaction.</b>
+
+![Imagen11](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura11.png)
+
+<u><b> Sobre la granja con Haproxy </b></u>
+
+Paramos el servicio del balanceador nginx con la orden <b> service nginx stop </b>. Una vez hecho esto, realizamos lo mismo que hicimos antes, es decir, lanzamos la orden <b>siege -b -t60s -v http://192.168.1.25/practica4.html > prueba6.txt </b> sobre la máquina3.
+
+Nos quedamos con los datos <b>Availability, Elapsed time, Response time, Transaction Rate, Failed Transactions y Longest Transaction.</b>
+
+![Imagen12](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica4/Captura12.png)
