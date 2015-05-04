@@ -1,0 +1,51 @@
+EJERCICIOS TEMA 7
+_________________________________________________________________________________________________________________________________
+
+Sergio Cáceres Pintor
+_________________________________________________________________________________________________________________________________
+
+Ejercicio 7.1 ¿Qué tamaño de unidad de unidad RAID se obtendrá al configurar un RAID 0 a partir de dos discos de 100 GB y 100 GB?
+
+Al ser un RAID 0 se trata como una suma. POr tanto, seria de 200GB
+
+- ¿Qué tamaño de unidad de unidad RAID se obtendrá al configurar un RAID 0 a partir de tres discos de 200 GB cada uno?
+
+Al ser un RAID 0 se trata como una suma. POr tanto, seria de 600GB
+
+
+Ejercicio 7.2 ¿Qué tamaño de unidad de unidad RAID se obtendrá al configurar un RAID 1 a partir de dos discos de 100 GB y 100 GB?
+
+Al ser un RAID 1 se tratan como hardware independientes, por tanto sería 100GB
+
+- ¿Qué tamaño de unidad de unidad RAID se obtendrá al configurar un RAID 1 a partir de tres discos de 200 GB cada uno?
+
+Al ser un RAID 1 se tratan como hardware independientes, por tanto sería 200GB
+
+
+Ejercicio 7.3 ¿Qué tamaño de unidad de unidad RAID se obtendrá al configurar un RAID 5 a partir de tres discos de 120 GB cada uno?
+
+Al ser un RAID 5, se utiliza 1 para paridad de los datos. Por tanto, seria 120 + 120 = 240GB, siendo el último 120 que se queda para paridad de los datos.
+
+
+Ejercicio 7.4 Buscar información sobre los sistemas de ficheros en red más utilizados en la actualidad y comparar sus características. Hacer una lista de ventajas e inconvenientes de todos ellos, así como grandes sistemas en los que se utilicen.
+
+Un sistema de ficheros es la forma de almacenar datos en un medio, la manera en que se organizan y manejan. 
+
+Hay muchos sistemas de ficheros, algunos más utilizados que otros (New Technology FileSystem (NTFS), High Performance FileSystem (HPFS),DOS, FAT 12/16/32, VFAT, Macintosh Hierarchical Filesystem (HFS), ISO 9660(para CD-ROM), extended file systems (Ext, Ext2, Ext3), y muchos otros).
+
+Algunos sistemas de ficheros impiden automáticamente la fragmentación, mientras que otros necesitan ser defragmentados manualmente. 
+
+La opción -r sincroniza el fichero /etc/mtab2 con el fichero /etc/exports file. La opción -v muestra juntos todos los sistemas de ficheros exportados junto con sus opciones.
+
+El acceso al sistema de ficheros exportado por NFS está controlado directamente por el núcleo. Éste tiene que haber sido compilado para soportar NFS. El fichero /proc/filesystems contiene una lista con todos los sistemas de ficheros soportados directamente por el núcleo. Entonces, lo único que tiene que hacer es decir al núcleo que quiere acceder a un sistema exportado por NFS.
+
+El comando mount permite acceder a diferentes sistemas de ficheros. Informa al núcleo que está disponible un nuevo sistema de ficheros indicando su tipo, su dispositivo y su punto de montaje. Se puede usar la opción -t  para indicar el tipo del sistema de ficheros a usar. Para NFS, escribimos: -t nfs.
+
+Algunas ventajas:
+
+Un sistema de archivos de red es el que accede a sus archivos a través de una red. Dentro de esta clasificación encontramos dos tipos de sistemas de archivos: los sistemas de archivos distribuidos (no proporcionan E/S en paralelo) y los sistemas de archivos paralelos (proporcionan una E/S de datos en paralelo).
+
+
+
+
+
