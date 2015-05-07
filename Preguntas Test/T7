@@ -1,0 +1,15 @@
+En un almacenamiento basado en RAID...
+a) Es un sistema de almacenamiento que usa múltiples discos duros entre los que se replican los datos
+b) Ofrece menor integridad
+c) Ofrece menor capacidad y menor rendimiento
+d) Un RAID por hardware es mas lento que uno configurado por software
+
+Respuesta correcta: A
+
+El RAID 4...
+a) Necesita un minimo de 2 discos físicos
+b) En lectura es muy ineficiente
+c) Es poco común, pues se abandonó por el RAID 5 y 6
+d) No puede servir varias peticiones de lectura simultáneamente
+
+Respuesta correcta: C
