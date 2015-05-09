@@ -1,0 +1,134 @@
+##PRÁCTICA 5
+
+Sergio Cáceres Pintor y David Olid Medina
+
+##Objetivo
+
+* Copiar archivos de copia de seguridad mediante ssh.
+* Clonar manualmente BD entre máquinas.
+* Configurar la estructura maestro-esclavo entre dos máquinas para realizar el clonado automático de la información.
+
+
+##Solución
+
+Necesitaremos 2 máquinas virtuales. Utilizaremos la máquina 1 y la máquina 2
+
+
+####<u>Crear una BD e insertar datos</u>
+
+Creamos la Base de datos en la máquina 1 e insertamos algunos datos:
+
+![Imagen1](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura1.JPG)
+
+![Imagen2](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura2.JPG)
+
+Ya tenemos datos (un registro) insertados en nuestra BD llamada “datos”. Podemos
+haber insertado más registros. Veamos cómo entrar y hacer una consulta:
+
+![Imagen3](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura3.JPG)
+
+
+####<u>Replicar una BD MySQL con mysqldump</u>
+
+MySQL ofrece la una herramienta para clonar las BD que tenemos en nuestra
+maquina. Esta herramienta es mysqldump.
+
+La sintaxis de uso es : <b>mysqldump ejemplodb -u root -p > /root/ejemplodb.sql</b>
+
+Por lo tanto, en el servidor de la Base de datos de la máquina 1 realizamos lo siguiente:
+
+![Imagen4](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura4.JPG)
+
+Ahora ya sí podemos hacer el mysqldump para guardar los datos. En el servidor principal (maquina1) hacemos:
+
+![Imagen5](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura5.JPG)
+
+Como habíamos bloqueado las tablas, debemos desbloquearlas (quitar el “LOCK”):
+
+![Imagen6](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura6.JPG)
+
+Ya podemos ir a la máquina esclavo (maquina2, secundaria) para copiar el archivo
+.SQL con todos los datos salvados desde la máquina principal (maquina1):
+
+![Imagen7](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura7.JPG)
+
+y habremos copiado desde la máquina principal (1) a la máquina secundaria (2) los
+datos que hay almacenados en la BD.
+
+Es importante destacar que el archivo .SQL de copia de seguridad tiene formato de
+texto plano, e incluye las sentencias SQL para restaurar los datos contenidos en la BD
+en otra máquina. Sin embargo, la orden mysqldump no incluye en ese archivo la
+sentencia para crear la BD (es necesario que nosotros la creemos en la máquina
+secundaria en un primer paso, antes de restaurar las tablas de esa BD y los datos
+contenidos en éstas).
+
+Con el archivo de copia de seguridad en el esclavo ya podemos importar la BD
+completa en el MySQL. Para ello, en un primer paso creamos la BD con la orden <b>CREATE DATABASE contactos; </b>. Finalmente restauramos la base de datos. Ejecutamos: <b>mysql -u root -p contactos < /root/contactos.sql</b>
+
+![Imagen8](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura8.JPG)
+
+
+####<u>Replicación de BD mediante una configuración maestro-esclavo</u>
+
+Lo primero que debemos hacer es la configuración de mysql del maestro. Para ello
+editamos, como root, el <v>/etc/mysql/my.cnf</b> para realizar las modificaciones que se describen a continuación.
+
+bind-address 127.0.0.1 (Comentamos esto)
+
+log_error = /var/log/mysql/error.log
+
+server-id = 1
+
+log_bin = /var/log/mysql/bin.log
+
+Guardamos el documento y reiniciamos el servicio:
+
+<b>/etc/init.d/mysql restart</b>
+
+![Imagen9](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura9.JPG)
+
+Si no nos ha dado ningún error la configuración del maestro, podemos pasar a hacer
+la configuración del mysql del esclavo (vamos a editar como root el <b>/etc/mysql/my.cnf)</b>
+
+La configuración es similar a la del maestro, con la diferencia de que el server-id en
+esta ocasión será 2
+
+![Imagen10](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura10.JPG)
+
+Reiniciamos el servicio en el esclavo:
+<b>/etc/init.d/mysql restart</b>
+
+y una vez más, si no da ningún error, habremos tenido éxito. Podemos volver al
+maestro para crear un usuario y darle permisos de acceso para la replicación.
+
+Entramos en mysql y ejecutamos las siguientes sentencias:
+
+<b>CREATE USER esclavo IDENTIFIED BY 'esclavo';</b>
+
+<b>GRANT REPLICATION SLAVE ON *.* TO 'esclavo'@'%'IDENTIFIED BY 'esclavo';</b>
+
+<b>FLUSH PRIVILEGES;</b>
+
+<b>FLUSH TABLES;</b>
+
+<b>FLUSH TABLES WITH READ LOCK;</b>
+
+Para finalizar con la configuración en el maestro, obtenemos los datos de la base de
+datos que vamos a replicar para posteriormente usarlos en la configuración del
+esclavo: <b>SHOW MASTER STATUS;</b>
+
+![Imagen11](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura11.JPG)
+
+Volvemos a la máquina esclava, entramos en mysql y le damos los datos del maestro.
+
+![Imagen12](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura12.JPG)
+
+Para comprobar que todo funciona, debemos ir al maestro e introducir nuevos datos a
+la base de datos. A continuación vamos al esclavo para revisar si la modificación se ha
+reflejado en la tabla modificada en el maestro:
+
+![Imagen13](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura13.JPG)
+
+Y comprobamos en el esclavo como existe dicho dato introducido anteriormente en el maestro
+
+![Imagen14](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica5/Captura14.JPG)
