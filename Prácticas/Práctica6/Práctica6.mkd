@@ -1,0 +1,68 @@
+##PRÁCTICA 6
+
+Sergio Cáceres Pintor y David Olid Medina
+
+##Objetivo
+
+* Configurar dos discos en RAID 1 (los discos se añadirán a un sistema ya instalado y funcionando).
+* Hacer pruebas de retirar y añadir un disco y comprobar que el RAID sigue funcionando correctamente.
+
+
+##Solución
+
+Usaremos la máquina 1 para realizar esta práctica.
+Antes que nada añadimos dos discos duros a la máquina virtual 1:
+
+![Imagen11](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica6/Captura11.png)
+
+
+####<u>Configuración del RAID por sofware</u>
+
+Ahora arrancamos la máquina y entramos para instalar el software necesario para configurar el RAID con la orden <b>sudo apt-get install mdadm</b>
+
+Debemos buscar la información de ambos discos con la orden <b>sudo fdisk -l</b>
+
+![Imagen1](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica6/Captura1.png)
+
+Ahora ya podemos crear el RAID 1, usando el dispositivo /dev/md0, indicando el número de dispositivos a utilizar (2), así como su ubicación:
+
+![Imagen2](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica6/Captura2.png)
+
+Una vez creado el dispositivo RAID, le damos formato:
+
+![Imagen3](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica6/Captura3.png)
+
+Ahora ya podemos crear el directorio en el que se montará la unidad del RAID:
+
+![Imagen4](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica6/Captura4.png)
+
+Para comprobar el estado del RAID, ejecutaremos:
+
+![Imagen5](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica6/Captura5.png)
+
+Para finalizar el proceso, conviene configurar el sistema para que monte el dispositivo RAID creado al arrancar el sistema. Para ello debemos editar el archivo /etc/fstab y añadir la línea correspondiente para montar automáticamente dicho dispositivo.
+
+Primeramente sacamos el UUID haciendo un <b>ls -l /dev/disk/by-uuid/</b>
+
+![Imagen7](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica6/Captura7.png)
+
+Una vez que tenemos el UUID, configuramos el archivo <b>/etc/fstab</b> y lo dejamos de la siguiente manera:
+
+![Imagen6](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica6/Captura6.png)
+
+
+####<u>Simular un fallo en uno de los discos del RAID.</u>
+
+Ahora vamos a simular un fallo de disco a propósito. Primeramente ejecutamos la orden <b>mdadm --manage --set-faulty /dev/md0 /dev/sdb</b>
+
+A continuación hacemos:
+
+![Imagen8](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica6/Captura8.png)
+
+Como vemos, uno de los discos ha caído, pero el otro no. Eliminaremos el disco caido de la siguiente manera:
+
+![Imagen9](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica6/Captura9.png)
+
+Finalmente vamos a añadirlo de nuevo y comprobar que todo esta bien. Primeramente nos creamos un directorio llamado sdb1 para poder montarlo.
+
+![Imagen10](https://github.com/sergiocaceres/swap1415/blob/master/Pr%C3%A1cticas/Pr%C3%A1ctica6/Captura10.png)
