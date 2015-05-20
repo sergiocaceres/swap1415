@@ -1,0 +1,15 @@
+El servidor web tiene unas necesidades como...
+a) El diseño debe permitir el escalado del sistema
+b) Se debe realizar solamente una vez monitorización
+c) El sistema de base de datos debe residir en la misma máquina
+d) Para planear la capacidad del servidor existe una fórmula 
+
+Respuesta correcta: A
+
+Una vez que se haya montado el sistema:
+a) No es necesario detectar posibles cuellos de botella
+b) No es necesario realizar tests de carga con benchmarks
+c) Es importante monitorizar cómo está funcionando
+d) No es necesario poner el sistema en producción de forma controlada
+
+Respuesta correcta: C
